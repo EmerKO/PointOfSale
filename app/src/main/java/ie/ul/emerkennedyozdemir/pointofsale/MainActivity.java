@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mNameTextView, mQuantityTextView, mDateTextView;
     private Item mCurrentItem;
+    private Item mClearedItem;
 
 
     @Override
@@ -65,8 +66,25 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_reset:
+                mClearedItem = mCurrentItem;
                 mCurrentItem = new Item();
                 showCurrentItem();
+              //todo: use a snackbar to enable undo
+              Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_layout),
+                      "Item Cleared", Snackbar.LENGTH_LONG);
+              snackbar.setAction("UNDO", new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                      // todo: do the undo
+                      mCurrentItem = mClearedItem;
+                      showCurrentItem();
+                      Snackbar.make(findViewById(R.id.coorddinator_layout),
+                              "Item restored", Snackbar.LENGTH_SHORT).show();
+
+                  }
+              });
+
+              snackbar.show();
                 return true;
             case R.id.action_settings:
                 //startActivity(new Intent(Settings.ACTION_SETTINGS));
